@@ -24,10 +24,14 @@
 
                 <el-table-column prop="number" label="编号" align="center"></el-table-column>
                 <el-table-column prop="putTimeStr" label="投入市场时间"></el-table-column>
+
+               
+              
+
                 <el-table-column prop="longitude" label="经度"></el-table-column>
                 <el-table-column prop="dimensionality" label="维度" align="center"></el-table-column>
 
-                <el-table-column  label="状态" align="center">
+                <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
                         <span v-if="scope.row.state==0">未使用</span>
                         <span v-if="scope.row.state==1">正在使用</span>
@@ -61,7 +65,8 @@
             };
         },
         created() {
-            this.getCarData();
+            this.getCarData()
+            
         },
         methods: {
             // 获取 easy-mock 的模拟数据
@@ -70,6 +75,8 @@
                     this.cars = resp.data
                 })
             },
+
+           
         }
     };
 </script>

@@ -19,19 +19,28 @@ axios.interceptors.response.use(
     response => {
         // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据     
         // 否则的话抛出错误
-        if (response.status == 200 && response.data.code == 0) {
-            response.data=response.data.data
-            
-            return Promise.resolve(response);
-        } else {
-            
+        if (response.status == 200 ) {
+
+            if(response.data.code == 0) {
+                response.data=response.data.data
+                return Promise.resolve(response)
+            }
+
             if(response.data.code == '400') {
                 Message.error(response.data.message)
+                return Promise.reject(response);
             }
             if(response.data.code == '403') {
-                Message.error("权限不足")
+                Message.error('权限不足')
+                return Promise.reject(response);
             }
+            
+            return Promise.resolve(response)
+            
+        } else {
+            Message.error('发生错误，请检查网络')
             return Promise.reject(response);
+            
         }
     },
     // 服务器状态码不是2开头的的情况
@@ -39,6 +48,8 @@ axios.interceptors.response.use(
     // 然后根据返回的状态码进行一些操作，例如登录过期提示，错误提示等等
     // 下面列举几个常见的操作，其他需求可自行扩展
     error => {
+
+        Message.error("发生错误，请检查网络")
         if (error.response.status) {
             return Promise.reject(error.response);
         }

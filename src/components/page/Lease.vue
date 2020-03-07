@@ -22,7 +22,7 @@
             <!-- 弹窗 -->
 
             <el-dialog title="车辆信息" :visible.sync="showCar">
-                <el-form >
+                <el-form>
                     <el-form-item label="车辆编号：" label-width="120px">
                         <el-input :disabled="true" v-text="car.id" autocomplete="off"></el-input>
                     </el-form-item>
@@ -63,30 +63,38 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="statTimeStr" label="租用时间" width="180px" align="center"></el-table-column>
-                <el-table-column label="租用位置" align="center">
+                <el-table-column label="租用位置" align="center" width="200px">
                     <template slot-scope="scope">
-                        <span v-text="scope.row.startLongitude"></span>
-                        ||
-                        <span v-text="scope.row.startDimensionality"></span>
+
+                        <el-tooltip class="item" effect="dark" :content="adress" placement="top-start">
+                            <div @mouseover="getAdress(scope.row)">
+                                <el-button v-text="scope.row.startLongitude+' || '+scope.row.startDimensionality">
+                                </el-button>
+                            </div>
+                        </el-tooltip>
 
                     </template>
+
                 </el-table-column>
 
                 <el-table-column label="结束时间" width="180px" align="center">
                     <template slot-scope="scope">
                         <div v-if="scope.row.endTimeStr">
-                            <span v-text="endTimeStr"></span>
+                            <span v-text="scope.row.endTimeStr"></span>
                         </div>
                         <div v-else>暂无数据</div>
                     </template>
                 </el-table-column>
-                <el-table-column label="结束位置" align="center">
+                <el-table-column label="结束位置" align="center" width="200px">
 
                     <template slot-scope="scope">
                         <div v-if="scope.row.endLongitude">
-                            <span v-text="scope.row.endLongitude"></span>
-                            ||
-                            <span v-text="scope.row.endDimensionality"></span>
+                            <el-tooltip class="item" effect="dark" :content="adress" placement="top-start">
+                                <div @mouseover="getAdress(scope.row)">
+                                    <el-button v-text="scope.row.endLongitude+' || '+scope.row.endDimensionality">
+                                    </el-button>
+                                </div>
+                            </el-tooltip>
                         </div>
                         <div v-else>暂无数据</div>
                     </template>
@@ -116,12 +124,24 @@
                             租用中
                         </span>
                         <span v-if="scope.row.state==1">
-                            用户已付钱
+                            已付钱
                         </span>
                         <span v-if="scope.row.state==-1">
-                            用户未付钱
+                            未付钱
                         </span>
                     </template>
+                </el-table-column>
+
+                <el-table-column label="操作" align="center">
+
+                    <template slot-scope="scope">
+
+                        <el-button type="primary" plain>
+                            <router-link :to="'/lease/line/' +scope.row.id">查看路线</router-link>
+                        </el-button>
+
+                    </template>
+
                 </el-table-column>
 
 
@@ -141,7 +161,8 @@
             return {
                 leases: [],
                 showCar: false,
-                car: []
+                car: [],
+                adress: ''
             };
         },
         created() {
@@ -180,6 +201,22 @@
                 })
             },
             openUser() {
+
+            },
+
+            getAdress(local) {
+                let url = 'https://restapi.amap.com/v3/geocode/regeo?location=' + local.startLongitude + ',' + local
+                    .startDimensionality + '&key=58db38b9aaa81f1b9f1ba0e6e2698629'
+                this.getRequest(
+                    url
+                ).then(resp => {
+                    let adress = resp.data.regeocode.formatted_address
+                    if (adress == '') {
+                        adress = '暂无位置信息'
+                    }
+                    this.adress = adress
+
+                })
 
             }
         }

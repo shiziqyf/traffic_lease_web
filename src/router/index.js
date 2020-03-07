@@ -40,6 +40,11 @@ export default new Router({
                     component: () => import('../components/page/User.vue'),
                     meta: { title: '用户管理' }
                 },
+                {
+                    path: '/lease/line/:id',
+                    component: () => import('../components/page/LeaseLine.vue'),
+                    meta: { title: '路线' }
+                },
                
                 {
                     path: '/404',
