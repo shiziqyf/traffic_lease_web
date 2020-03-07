@@ -9,11 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-button type="primary" icon="el-icon-delete" class="handle-del mr10">批量删除
-                </el-button>
 
-                <el-input placeholder="用户名" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search">搜索</el-button>
                 <router-link to="/car/map">
                     <el-button type="primary" plain> 显示地图</el-button>
                 </router-link>
@@ -25,34 +21,38 @@
                 <el-table-column prop="number" label="编号" align="center"></el-table-column>
                 <el-table-column prop="putTimeStr" label="投入市场时间"></el-table-column>
 
-               
-              
 
-                <el-table-column prop="longitude" label="经度"></el-table-column>
+                <el-table-column prop="longitude" label="经度" align="center"></el-table-column>
                 <el-table-column prop="dimensionality" label="维度" align="center"></el-table-column>
 
                 <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
                         <span v-if="scope.row.state==0">未使用</span>
                         <span v-if="scope.row.state==1">正在使用</span>
-                        <span v-if="scope.row.state==-1">出故障</span>
+                        <!-- <span v-if="scope.row.state==-1">出故障</span> -->
                         <span v-if="scope.row.state==-2">已回收</span>
                     </template>
 
                 </el-table-column>
                 <el-table-column label="操作" align="center">
+                    <template slot-scope="scope">
 
-                    <el-button type="primary" plain>
-                        <router-link to="/map"> 显示地图</router-link>
-                    </el-button>
+                        <el-button v-if="scope.row.state==0" type="primary">回收</el-button>
+                        <el-button v-if="scope.row.state==1" disabled type="primary">回收</el-button>
+                        <el-button v-if="scope.row.state==-2" type="primary">重新投入市场</el-button>
+                    </template>
+
                 </el-table-column>
 
             </el-table>
-
         </div>
-
-        <!-- 编辑弹出框 -->
-
+          共<span v-text="total"></span>条数据,<span v-text="num"></span>/<span v-text="maxNum"></span>页
+        <div style="text-align: right">
+                <template>
+                    <el-input-number v-model="num" :min="1" :max="maxNum" label="描述文字">
+                    </el-input-number>
+                </template>
+            </div>
     </div>
 </template>
 
@@ -61,22 +61,35 @@
         name: 'basetable',
         data() {
             return {
-                cars: []
+                cars: [],
+                num: 1,
+                maxNum: 1,
+                total: 1
             };
         },
         created() {
             this.getCarData()
-            
         },
+        watch: {
+            num() {
+                this.getCarData()
+            }
+        },
+      
         methods: {
             // 获取 easy-mock 的模拟数据
             getCarData() {
-                this.getRequest('/car').then(resp => {
-                    this.cars = resp.data
+                
+                this.getRequest('/car/?pageNum='+this.num).then(resp => {
+                    this.cars = resp.data.list
+                    this.num = resp.data.pageNum
+                    this.maxNum = resp.data.pages
+                    this.total = resp.data.total
                 })
             },
 
-           
+
+
         }
     };
 </script>

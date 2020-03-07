@@ -23,7 +23,7 @@
 
             getCarData() {
                 this.getRequest('/car').then(resp => {
-                    this.cars = resp.data
+                    this.cars = resp.data.list
                     this.MapInit() //请求到车辆数据后，初始化地图
                 })
             },
@@ -62,22 +62,11 @@
                 })
 
                 map.add(markerList)
-                this.map = map
-
+           
 
             },
 
-            openMessage() {
-
-
-                let infoWindow = new AMap.InfoWindow({
-                    anchor: 'top-left',
-                    content: content.join("<br>"),
-                });
-
-                infoWindow.open(this.map, [116.401337, 39.907886])
-
-            }
+         
 
 
 
