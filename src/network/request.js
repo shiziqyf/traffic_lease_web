@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { Message } from 'element-ui';
-axios.defaults.baseURL = 'http://localhost:8081'
+axios.defaults.baseURL = 'http://localhost:8080'
 axios.defaults.timeout = 8000
 
 //请求异常拦截

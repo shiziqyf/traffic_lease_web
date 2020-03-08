@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 基础表格
+                    <i class="el-icon-lx-cascades"></i> 车辆信息
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -15,7 +15,7 @@
                 </router-link>
             </div>
 
-            车辆信息
+            
             <el-table :data="cars" border class="table" ref="multipleTable" header-cell-class-name="table-header">
 
                 <el-table-column prop="number" label="编号" align="center"></el-table-column>
@@ -46,13 +46,13 @@
 
             </el-table>
         </div>
-          共<span v-text="total"></span>条数据,<span v-text="num"></span>/<span v-text="maxNum"></span>页
+        共<span v-text="total"></span>条数据,<span v-text="num"></span>/<span v-text="maxNum"></span>页
         <div style="text-align: right">
-                <template>
-                    <el-input-number v-model="num" :min="1" :max="maxNum" label="描述文字">
-                    </el-input-number>
-                </template>
-            </div>
+            <template>
+                <el-input-number v-model="num" :min="1" :max="maxNum" @change="getCarData" label="分页">
+                </el-input-number>
+            </template>
+        </div>
     </div>
 </template>
 
@@ -70,17 +70,13 @@
         created() {
             this.getCarData()
         },
-        watch: {
-            num() {
-                this.getCarData()
-            }
-        },
       
+
         methods: {
-            // 获取 easy-mock 的模拟数据
+
             getCarData() {
-                
-                this.getRequest('/car/?pageNum='+this.num).then(resp => {
+
+                this.getRequest('/car/?pageNum=' + this.num).then(resp => {
                     this.cars = resp.data.list
                     this.num = resp.data.pageNum
                     this.maxNum = resp.data.pages

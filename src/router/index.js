@@ -45,6 +45,13 @@ export default new Router({
                     component: () => import('../components/page/LeaseLine.vue'),
                     meta: { title: '路线' }
                 },
+
+
+                {
+                    path: '/admin',
+                    component: () => import('../components/page/Admin.vue'),
+                    meta: { title: '路线' }
+                },
                
                 {
                     path: '/404',

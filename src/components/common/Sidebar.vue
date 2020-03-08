@@ -40,29 +40,48 @@
                 items: [{
                         icon: 'el-icon-lx-home',
                         index: '/dashboard',
-                        title: '系统首页'
+                        title: '首页'
                     },
-                  
+
                     {
                         icon: 'el-icon-lx-calendar',
-                        index: '3',
+                        index: 'info',
                         title: '信息管理',
                         subs: [{
                                 index: '/car',
-                                title: '车辆管理'
+                                title: '车辆信息'
                             },
-                            
+
                             {
                                 index: '/lease',
                                 title: '租赁信息'
                             },
 
-                             {
+                            {
                                 index: '/user',
-                                title: '用户管理'
+                                title: '用户信息'
                             }
                         ]
+                    },
+                    
+                    {
+                        icon: 'el-icon-lx-calendar',
+                        index: 'system',
+                        title: '系统管理',
+                        subs: [{
+                                index: '/admin',
+                                title: '管理员'
+                            },
+
+                            {
+                                index: '/',
+                                title: '计费规则'
+                            },
+
+                        ]
                     }
+
+
                 ]
             };
         },

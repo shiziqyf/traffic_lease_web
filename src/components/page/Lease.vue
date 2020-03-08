@@ -3,19 +3,14 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 基础表格
+                    <i class="el-icon-lx-cascades"></i> 租赁信息
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-button type="primary" icon="el-icon-delete" class="handle-del mr10">批量删除
-                </el-button>
-
-                <el-input placeholder="用户名" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search">搜索</el-button>
                 <router-link to="/car/map">
-                    <el-button type="primary" plain> 显示地图</el-button>
+                    <el-button type="primary" plain> 统计分析</el-button>
                 </router-link>
             </div>
 
@@ -45,12 +40,12 @@
             </el-dialog>
 
 
-            租赁信息
+
             <el-table :data="leases" border class="table" ref="multipleTable" header-cell-class-name="table-header">
 
                 <el-table-column label="车辆编号" align="center">
                     <template slot-scope="scope">
-                        <el-link :underline="false" v-text="scope.row.carNumber" @click="openCar"></el-link>
+                        <el-link :underline="false" v-text="scope.row.carNumber" @click="openCar(scope.row.carId)"></el-link>
                     </template>
                 </el-table-column>
 
@@ -136,9 +131,11 @@
 
                     <template slot-scope="scope">
 
-                        <el-button type="primary" plain>
-                            <router-link :to="'/lease/line/' +scope.row.id">查看路线</router-link>
-                        </el-button>
+
+                        <router-link :to="'/lease/line/' +scope.row.id">查看路线
+                            
+                        </router-link>
+
 
                     </template>
 
@@ -149,7 +146,13 @@
 
         </div>
 
-        <!-- 编辑弹出框 -->
+        共<span v-text="total"></span>条数据,<span v-text="num"></span>/<span v-text="maxNum"></span>页
+        <div style="text-align: right">
+            <template>
+                <el-input-number v-model="num" :min="1" :max="maxNum" @change="getLeaseData" label="分页">
+                </el-input-number>
+            </template>
+        </div>
 
     </div>
 </template>
@@ -162,28 +165,29 @@
                 leases: [],
                 showCar: false,
                 car: [],
-                adress: ''
+                adress: '',
+                num: 1,
+                maxNum: 1,
+                total: 1
             };
         },
         created() {
-            this.getCarData()
-        },
-        watch: {
-            car() {
-                console.log(this.car)
-            }
+            this.getLeaseData()
         },
 
+
         methods: {
-            // 获取 easy-mock 的模拟数据
-            getCarData() {
-                this.getRequest('/lease').then(resp => {
-                    this.leases = resp.data
+            getLeaseData() {
+                this.getRequest('/lease?pageNum=' + this.num).then(resp => {
+                    this.leases = resp.data.list
+                    this.num = resp.data.pageNum
+                    this.maxNum = resp.data.pages
+                    this.total = resp.data.total
                 })
             },
-            openCar() {
+            openCar(carId) {
                 this.showCar = true
-                this.getRequest('car/info/3f51ebfd53cd11eab95600fff9431785').then(resp => {
+                this.getRequest('car/info/'+carId).then(resp => {
                     var result = resp.data
                     if (result.state == 0) {
                         result.state = '未使用'
