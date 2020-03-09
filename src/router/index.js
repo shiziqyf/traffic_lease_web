@@ -50,7 +50,13 @@ export default new Router({
                 {
                     path: '/admin',
                     component: () => import('../components/page/Admin.vue'),
-                    meta: { title: '路线' }
+                    meta: { title: '管理员' }
+                },
+
+                {
+                    path: '/lease/leaseChart',
+                    component: () => import('../components/page/LeaseChart.vue'),
+                    meta: { title: '统计分析' }
                 },
                
                 {

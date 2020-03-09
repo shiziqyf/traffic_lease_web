@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <router-link to="/car/map">
+                <router-link to="/lease/leaseChart">
                     <el-button type="primary" plain> 统计分析</el-button>
                 </router-link>
             </div>
@@ -17,35 +17,53 @@
             <!-- 弹窗 -->
 
             <el-dialog title="车辆信息" :visible.sync="showCar">
-                <el-form>
-                    <el-form-item label="车辆编号：" label-width="120px">
-                        <el-input :disabled="true" v-text="car.id" autocomplete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="投入市场时间：" label-width="120px">
-                        <el-input :disabled="true" v-text="car.putTimeStr" autocomplete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="经度：" label-width="120px">
-                        <el-input :disabled="true" v-text="car.longitude" autocomplete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="维度：" label-width="120px">
-                        <el-input :disabled="true" v-text="car.dimensionality" autocomplete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="状态：" label-width="120px">
-                        <el-input :disabled="true" v-text="car.state" autocomplete="off">
 
-                        </el-input>
-                    </el-form-item>
+                <el-row>
+                    <el-col :span="12">
+                        <div class="grid-content bg-purple">
+                            <el-form>
+                                <el-form-item label="车辆编号：" label-width="120px">
+                                    <el-input :disabled="true" v-text="car.number" autocomplete="off"></el-input>
+                                </el-form-item>
+                                <el-form-item label="投入市场时间：" label-width="120px">
+                                    <el-input :disabled="true" v-text="car.putTimeStr" autocomplete="off"></el-input>
+                                </el-form-item>
+                                <el-form-item label="经度：" label-width="120px">
+                                    <el-input :disabled="true" v-text="car.longitude" autocomplete="off"></el-input>
+                                </el-form-item>
+                                <el-form-item label="维度：" label-width="120px">
+                                    <el-input :disabled="true" v-text="car.dimensionality" autocomplete="off">
+                                    </el-input>
+                                </el-form-item>
+                                <el-form-item label="状态：" label-width="120px">
+                                    <el-input :disabled="true" v-text="car.state" autocomplete="off">
 
-                </el-form>
+                                    </el-input>
+                                </el-form-item>
+
+                            </el-form>
+                        </div>
+                    </el-col>
+                    <el-col :span="12">
+                        <div class="grid-content bg--light">
+                           
+                            <img :src="'http://' + car.qrUrl"/>
+
+                        </div>
+                    </el-col>
+                </el-row>
+
+
             </el-dialog>
 
 
 
             <el-table :data="leases" border class="table" ref="multipleTable" header-cell-class-name="table-header">
 
-                <el-table-column label="车辆编号" align="center">
+                <el-table-column label="车辆编号" align="center" width="160px">
                     <template slot-scope="scope">
-                        <el-link :underline="false" v-text="scope.row.carNumber" @click="openCar(scope.row.carId)"></el-link>
+                        <el-link :underline="false" v-text="scope.row.carNumber" @click="openCar(scope.row.carId)">
+                        </el-link>
                     </template>
                 </el-table-column>
 
@@ -57,7 +75,7 @@
                         <el-link :underline="false" v-text="scope.row.username" @click="openUser"></el-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="statTimeStr" label="租用时间" width="180px" align="center"></el-table-column>
+                <el-table-column prop="statTimeStr" label="租用时间" width="160px" align="center"></el-table-column>
                 <el-table-column label="租用位置" align="center" width="200px">
                     <template slot-scope="scope">
 
@@ -72,7 +90,7 @@
 
                 </el-table-column>
 
-                <el-table-column label="结束时间" width="180px" align="center">
+                <el-table-column label="结束时间" width="160px" align="center">
                     <template slot-scope="scope">
                         <div v-if="scope.row.endTimeStr">
                             <span v-text="scope.row.endTimeStr"></span>
@@ -127,13 +145,13 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column label="操作" align="center">
+                <el-table-column label="操作" align="center" fixed="right">
 
                     <template slot-scope="scope">
 
 
                         <router-link :to="'/lease/line/' +scope.row.id">查看路线
-                            
+
                         </router-link>
 
 
@@ -187,7 +205,7 @@
             },
             openCar(carId) {
                 this.showCar = true
-                this.getRequest('car/info/'+carId).then(resp => {
+                this.getRequest('car/info/' + carId).then(resp => {
                     var result = resp.data
                     if (result.state == 0) {
                         result.state = '未使用'

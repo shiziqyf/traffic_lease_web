@@ -11,19 +11,25 @@
             <div class="handle-box">
 
                 <router-link to="/car/map">
-                    <el-button type="primary" plain> 显示地图</el-button>
+                    <el-button type="primary" plain> 打开地图</el-button>
                 </router-link>
             </div>
 
-            
+
             <el-table :data="cars" border class="table" ref="multipleTable" header-cell-class-name="table-header">
 
                 <el-table-column prop="number" label="编号" align="center"></el-table-column>
-                <el-table-column prop="putTimeStr" label="投入市场时间"></el-table-column>
+                <el-table-column prop="putTimeStr" label="投入市场时间" align="center"></el-table-column>
 
 
                 <el-table-column prop="longitude" label="经度" align="center"></el-table-column>
                 <el-table-column prop="dimensionality" label="维度" align="center"></el-table-column>
+                <el-table-column label="二维码" align="center">
+                    <template slot-scope="scope">
+                        <el-image style="width: 40px; height: 40px" :src="'http://' + scope.row.qrUrl" @click="openUrl('http://' + scope.row.qrUrl)">
+                        </el-image>
+                    </template>
+                </el-table-column>
 
                 <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
@@ -32,14 +38,13 @@
                         <!-- <span v-if="scope.row.state==-1">出故障</span> -->
                         <span v-if="scope.row.state==-2">已回收</span>
                     </template>
-
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
 
-                        <el-button v-if="scope.row.state==0" type="primary">回收</el-button>
+                        <el-button v-if="scope.row.state==0" type="primary" @click="changeState(scope.row)">回收</el-button>
                         <el-button v-if="scope.row.state==1" disabled type="primary">回收</el-button>
-                        <el-button v-if="scope.row.state==-2" type="primary">重新投入市场</el-button>
+                        <el-button v-if="scope.row.state==-2" type="success" @click="changeState(scope.row)">重新投入市场</el-button>
                     </template>
 
                 </el-table-column>
@@ -70,7 +75,7 @@
         created() {
             this.getCarData()
         },
-      
+
 
         methods: {
 
@@ -83,6 +88,26 @@
                     this.total = resp.data.total
                 })
             },
+
+            openUrl(url) {
+                this.$alert('<image src='+url+'></image>', '', {
+                    dangerouslyUseHTMLString: true
+
+                });
+            },
+            changeState(car) {
+                let state = 0
+                if(car.state == 0){
+                    state = -2
+                }
+                this.postRequest('/car/changeCarState',{
+                    'carId': car.id,
+                    'state': state
+                }).then(resp => {
+                    this.getCarData()
+                })
+
+            }
 
 
 

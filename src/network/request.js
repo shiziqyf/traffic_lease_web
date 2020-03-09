@@ -6,8 +6,6 @@ axios.defaults.timeout = 8000
 
 //请求异常拦截
 axios.interceptors.request.use(config => {
-  
-
     return config;
 }, err => {
     console.log("错误")
@@ -15,7 +13,7 @@ axios.interceptors.request.use(config => {
 
 
 // 响应拦截器
-axios.interceptors.response.use(
+axios.interceptors.response.use (
     response => {
         // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据     
         // 否则的话抛出错误
@@ -32,6 +30,10 @@ axios.interceptors.response.use(
             }
             if(response.data.code == '403') {
                 Message.error('权限不足')
+                return Promise.reject(response);
+            }
+            if(response.data.code == '500') {
+                Message.error('系统出错')
                 return Promise.reject(response);
             }
             
