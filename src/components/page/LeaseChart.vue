@@ -29,7 +29,7 @@
                 timeDate: {
                     type: 'line',
                     title: {
-                        text: '每天中各时间段用户使用车俩数据'
+                        text: '一天中各时间段用户使用车俩数据'
                     },
                     labels: [],
                     datasets: [{

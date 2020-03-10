@@ -46,8 +46,8 @@
                     </el-col>
                     <el-col :span="12">
                         <div class="grid-content bg--light">
-                           
-                            <img :src="'http://' + car.qrUrl"/>
+
+                            <img :src="'http://' + car.qrUrl" />
 
                         </div>
                     </el-col>
@@ -80,9 +80,15 @@
                     <template slot-scope="scope">
 
                         <el-tooltip class="item" effect="dark" :content="adress" placement="top-start">
-                            <div @mouseover="getAdress(scope.row)">
-                                <el-button v-text="scope.row.startLongitude+' || '+scope.row.startDimensionality">
-                                </el-button>
+                            <div @mouseover="getAdress(scope.row.startLongitude, scope.row.startDimensionality)">
+                               
+                                <div>
+                                    <span v-text="'L:' + scope.row.startLongitude"></span>
+                                    <br>
+                                    <span v-text="'D:'+ scope.row.startDimensionality"></span>
+                                </div>
+
+                             
                             </div>
                         </el-tooltip>
 
@@ -103,9 +109,12 @@
                     <template slot-scope="scope">
                         <div v-if="scope.row.endLongitude">
                             <el-tooltip class="item" effect="dark" :content="adress" placement="top-start">
-                                <div @mouseover="getAdress(scope.row)">
-                                    <el-button v-text="scope.row.endLongitude+' || '+scope.row.endDimensionality">
-                                    </el-button>
+                                <div @mouseover="getAdress(scope.row.endLongitude, scope.row.endDimensionality)">
+                                    <div>
+                                    <span v-text="'L:' + scope.row.endLongitude"></span>
+                                    <br>
+                                    <span v-text="'D:'+ scope.row.endDimensionality"></span>
+                                </div>
                                 </div>
                             </el-tooltip>
                         </div>
@@ -117,7 +126,7 @@
                 <el-table-column prop="durationTime" label="时长" align="center">
                     <template slot-scope="scope">
                         <div v-if="scope.row.durationTime">
-                            <span v-text="durationTime"></span>
+                            <span v-text="scope.row.durationTime"></span>
                         </div>
                         <div v-else>暂无数据</div>
                     </template>
@@ -126,7 +135,7 @@
                 <el-table-column label="费用" align="center">
                     <template slot-scope="scope">
                         <div v-if="scope.row.expense">
-                            <span v-text="expense"></span>
+                            <span v-text="scope.row.expense"></span>
                         </div>
                         <div v-else>暂无数据</div>
                     </template>
@@ -226,9 +235,8 @@
 
             },
 
-            getAdress(local) {
-                let url = 'https://restapi.amap.com/v3/geocode/regeo?location=' + local.startLongitude + ',' + local
-                    .startDimensionality + '&key=58db38b9aaa81f1b9f1ba0e6e2698629'
+            getAdress(longitude, dimensionality) {
+                let url = 'https://restapi.amap.com/v3/geocode/regeo?location=' + longitude + ',' + dimensionality + '&key=58db38b9aaa81f1b9f1ba0e6e2698629'
                 this.getRequest(
                     url
                 ).then(resp => {
@@ -241,6 +249,7 @@
                 })
 
             }
+
         }
     };
 </script>

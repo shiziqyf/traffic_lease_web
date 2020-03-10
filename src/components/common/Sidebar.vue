@@ -39,7 +39,7 @@
                 collapse: false,
                 items: [{
                         icon: 'el-icon-lx-home',
-                        index: '/dashboard',
+                        index: '/index',
                         title: '首页'
                     },
 

@@ -7,7 +7,7 @@ export default new Router({
     routes: [
         {
             path: '/',
-            redirect: '/dashboard'
+            redirect: '/login'
         },
         {
             path: '/',
@@ -15,9 +15,9 @@ export default new Router({
             meta: { title: '自述文件' },
             children: [
                 {
-                    path: '/dashboard',
+                    path: '/index',
                     component: () => import('../components/page/Dashboard.vue'),
-                    meta: { title: '系统首页' }
+                    meta: { title: '首页' }
                 },
                 {
                     path: '/car',
@@ -61,12 +61,12 @@ export default new Router({
                
                 {
                     path: '/404',
-                    component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
+                    component: () => import('../components/page/404.vue'),
                     meta: { title: '404' }
                 },
                 {
                     path: '/403',
-                    component: () => import(/* webpackChunkName: "403" */ '../components/page/403.vue'),
+                    component: () => import('../components/page/403.vue'),
                     meta: { title: '403' }
                 },
              
@@ -74,7 +74,7 @@ export default new Router({
         },
         {
             path: '/login',
-            component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue'),
+            component: () => import('../components/page/Login.vue'),
             meta: { title: '登录' }
         },
         {

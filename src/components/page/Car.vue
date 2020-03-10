@@ -22,11 +22,29 @@
                 <el-table-column prop="putTimeStr" label="投入市场时间" align="center"></el-table-column>
 
 
-                <el-table-column prop="longitude" label="经度" align="center"></el-table-column>
-                <el-table-column prop="dimensionality" label="维度" align="center"></el-table-column>
+                <!-- <el-table-column prop="longitude" label="经度" align="center"></el-table-column>
+                <el-table-column prop="dimensionality" label="维度" align="center"></el-table-column> -->
+                <el-table-column label="车辆位置" align="center">
+                    <template slot-scope="scope" >
+                    <el-tooltip class="item" effect="dark" :content="adress" placement="top-start">
+                        
+                            <div @mouseover="getAdress(scope.row)">
+
+                                <div>
+                                    <span v-text="'L:' + scope.row.longitude"></span>
+                                    <br>
+                                    <span v-text="'D:'+ scope.row.dimensionality"></span>
+                                </div>
+
+                            </div>
+                      
+                    </el-tooltip>
+                      </template>
+                </el-table-column>
                 <el-table-column label="二维码" align="center">
                     <template slot-scope="scope">
-                        <el-image style="width: 40px; height: 40px" :src="'http://' + scope.row.qrUrl" @click="openUrl('http://' + scope.row.qrUrl)">
+                        <el-image style="width: 40px; height: 40px" :src="'http://' + scope.row.qrUrl"
+                            @click="openUrl('http://' + scope.row.qrUrl)">
                         </el-image>
                     </template>
                 </el-table-column>
@@ -42,9 +60,11 @@
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
 
-                        <el-button v-if="scope.row.state==0" type="primary" @click="changeState(scope.row)">回收</el-button>
+                        <el-button v-if="scope.row.state==0" type="primary" @click="changeState(scope.row)">回收
+                        </el-button>
                         <el-button v-if="scope.row.state==1" disabled type="primary">回收</el-button>
-                        <el-button v-if="scope.row.state==-2" type="success" @click="changeState(scope.row)">重新投入市场</el-button>
+                        <el-button v-if="scope.row.state==-2" type="success" @click="changeState(scope.row)">重新投入市场
+                        </el-button>
                     </template>
 
                 </el-table-column>
@@ -69,11 +89,13 @@
                 cars: [],
                 num: 1,
                 maxNum: 1,
-                total: 1
+                total: 1,
+                adress: ''
             };
         },
         created() {
             this.getCarData()
+
         },
 
 
@@ -90,21 +112,36 @@
             },
 
             openUrl(url) {
-                this.$alert('<image src='+url+'></image>', '', {
+                this.$alert('<image src=' + url + '></image>', '', {
                     dangerouslyUseHTMLString: true
 
                 });
             },
             changeState(car) {
                 let state = 0
-                if(car.state == 0){
+                if (car.state == 0) {
                     state = -2
                 }
-                this.postRequest('/car/changeCarState',{
+                this.postRequest('/car/changeCarState', {
                     'carId': car.id,
                     'state': state
                 }).then(resp => {
                     this.getCarData()
+                })
+
+            },
+            getAdress(local) {
+                let url = 'https://restapi.amap.com/v3/geocode/regeo?location=' + local.longitude + ',' + local
+                    .dimensionality + '&key=58db38b9aaa81f1b9f1ba0e6e2698629'
+                this.getRequest(
+                    url
+                ).then(resp => {
+                    let adress = resp.data.regeocode.formatted_address
+                    if (adress == '') {
+                        adress = '暂无位置信息'
+                    }
+                    this.adress = adress
+
                 })
 
             }

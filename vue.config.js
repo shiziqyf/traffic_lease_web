@@ -1,4 +1,7 @@
 module.exports = {
+    devServer: {
+        port: 8082
+    },
     baseUrl: './',
     assetsDir: 'static',
     productionSourceMap: false,

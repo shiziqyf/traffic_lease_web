@@ -1,4 +1,6 @@
 import axios from 'axios';
+import store from '@/store/index';
+import router from '@/router/index';
 
 import { Message } from 'element-ui';
 axios.defaults.baseURL = 'http://localhost:8080'
@@ -6,9 +8,14 @@ axios.defaults.timeout = 8000
 
 //请求异常拦截
 axios.interceptors.request.use(config => {
+    let url = config.url
+    if( url.indexOf('https://restapi.amap.com') == -1){
+        config.headers.Authorization = store.state.token
+    }
+
     return config;
 }, err => {
-    console.log("错误")
+    console.log('错误')
 })
 
 
@@ -28,10 +35,17 @@ axios.interceptors.response.use (
                 Message.error(response.data.message)
                 return Promise.reject(response);
             }
+            if(response.data.code == '402') {
+                Message.error(response.data.message)
+                router.push('/login')
+                return Promise.reject(response);
+            }
+
             if(response.data.code == '403') {
                 Message.error('权限不足')
                 return Promise.reject(response);
             }
+           
             if(response.data.code == '500') {
                 Message.error('系统出错')
                 return Promise.reject(response);
