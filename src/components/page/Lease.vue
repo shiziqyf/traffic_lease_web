@@ -123,10 +123,10 @@
 
                 </el-table-column>
 
-                <el-table-column prop="durationTime" label="时长" align="center">
+                <el-table-column prop="durationTime" label="时长"  align="center">
                     <template slot-scope="scope">
                         <div v-if="scope.row.durationTime">
-                            <span v-text="scope.row.durationTime"></span>
+                            <span v-text="scope.row.durationTime + '分钟'"></span>
                         </div>
                         <div v-else>暂无数据</div>
                     </template>
@@ -135,7 +135,7 @@
                 <el-table-column label="费用" align="center">
                     <template slot-scope="scope">
                         <div v-if="scope.row.expense">
-                            <span v-text="scope.row.expense"></span>
+                            <span v-text="scope.row.expense + '元'"></span>
                         </div>
                         <div v-else>暂无数据</div>
                     </template>

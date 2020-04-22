@@ -45,6 +45,11 @@ export default new Router({
                     component: () => import('../components/page/LeaseLine.vue'),
                     meta: { title: '路线' }
                 },
+                {
+                    path: '/charge',
+                    component: () => import('../components/page/Charge.vue'),
+                    meta: { title: 'Charge' }
+                },
 
 
                 {
