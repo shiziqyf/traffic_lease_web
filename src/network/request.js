@@ -9,7 +9,7 @@ axios.defaults.timeout = 8000
 //请求异常拦截
 axios.interceptors.request.use(config => {
     let url = config.url
-    if( url.indexOf('https://restapi.amap.com') == -1){
+    if( url.indexOf('https://restapi.amap.com') == -1) {
         config.headers.Authorization = store.state.token
     }
 

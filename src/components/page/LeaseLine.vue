@@ -49,13 +49,13 @@
 
                 let startIcon = new AMap.Icon({
                     size: new AMap.Size(40, 50), // 图标尺寸
-                    image: 'http://47.240.121.14/img/icon/start.png', // Icon的图像
+                    image: 'http://47.240.48.26:82/img/icon/start.png', // Icon的图像
 
                     imageSize: new AMap.Size(40, 50) // 根据所设置的大小拉伸或压缩图片
                 });
                 let endIcon = new AMap.Icon({
                     size: new AMap.Size(40, 50), // 图标尺寸
-                    image: 'http://47.240.121.14/img/icon/end.png', // Icon的图像
+                    image: 'http://47.240.48.26:82/img/icon/end.png', // Icon的图像
 
                     imageSize: new AMap.Size(40, 50) // 根据所设置的大小拉伸或压缩图片
                 });
